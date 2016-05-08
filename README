@@ -12,7 +12,20 @@ Submitted Files
 ---------------
 README - This file
 
+Parser.py - The Parser module built according to the specifications that were
+online. Handles the parsing of a single .vm file, and encapsulates access to
+the input code. It reads VM commands, parses them, and provides convenient 
+access to their components. Although unlike the specifications online we do
+NOT modify the original file by removing any white spaces or comments
 
+CodeWriter.py - The module that does the actual translation from VM code to
+jack assembly code. 
+
+VMtranslator.py - The main code which runs everything. receives as input either
+a directory or a .vm file. In the case of a directory, any .vm files found
+inside the directory will all be translated into one .asm file (one file
+named after the directory). In the case of one .avm file, we produce a translated
+.asm file inside the same directory with the same name.
 
 
 Remarks
