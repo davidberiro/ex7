@@ -6,8 +6,8 @@ import Parser
 class CodeWriter:
 
     def __init__(self, filename):
-        # self.parser = Parser(inputFile)
-        self.outFile = open(filename, 'w')
+        name = filename + ".asm"
+        self.outFile = open(name, 'w')
 
     def setFileName(self,fileName):
         self.fileName = fileName
@@ -85,7 +85,6 @@ class CodeWriter:
             "constant": ""
         }
         return segment.get(seg, "ERROR")
-
 
 
     def Close(self):
