@@ -1,15 +1,15 @@
 __author__ = 'davidberiro'
 
 import os
-from Parser import *
+import Parser
 from CodeWriter import *
 import sys
 
 files = []
-directory = argv[1]
+directory = sys.argv[1]
 os.chdir(directory)
 
-if directory.endwith(".vm"):
+if directory.endswith(".vm"):
     outputname = directory.split("/")[-1][:-3]
     os.chdir("..")
 else:
@@ -17,13 +17,13 @@ else:
 
 
 for f in os.listdir("."):
-    if f.endwith(".vm"):
+    if f.endswith(".vm"):
         files.append(f)
 
 codewriter = CodeWriter(outputname)
 
 for file in files:
-    parser = parser(file)
+    parser = Parser(file)
     codewriter.setFileName(file[:-3])
 
     while parser.hasMoreCommands():

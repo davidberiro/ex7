@@ -1,6 +1,7 @@
-from os import open
 
 __author__ = 'davidberiro'
+
+from os import open
 
 ARITHMETIC_COMMAND = ["add", "sub", "neg", "eq", "gt", "lt", "and", "or", "not"]
 POP = "pop"
