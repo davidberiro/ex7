@@ -1,8 +1,6 @@
 
 __author__ = 'davidberiro'
 
-from os import open
-
 ARITHMETIC_COMMAND = ["add", "sub", "neg", "eq", "gt", "lt", "and", "or", "not"]
 POP = "pop"
 PUSH = "push"
@@ -26,7 +24,6 @@ class Parser:
         self.inputFile = open(inputFileName, 'r')
         self.currentLine = None
         self.currentCommand = []
-        self.commandType = None
         self.hasNextCommand = False
 
 
@@ -38,7 +35,7 @@ class Parser:
 
         while self.currentLine:
             self.currentLine = self.currentLine.strip()
-            if self.currentLine == "" or self.currentLine.starswith("//"):
+            if self.currentLine == "" or self.currentLine.startswith("//"):
                 self.currentLine = self.inputFile.readline()
             else:
                 self.hasNextCommand = True
@@ -47,7 +44,7 @@ class Parser:
         return False
 
     def advance(self):
-        if self.hasMoreCommands(self):
+        if self.hasMoreCommands():
             self.currentCommand = self.currentLine.split(' ')
             self.hasNextCommand = False
 
@@ -55,13 +52,17 @@ class Parser:
         return len(someList)
 
     def commandType(self):
-        if self.len(self.currentCommand) == 1 and self.currentCommand[0] in ARITHMETIC_COMMAND:
-            return C_ARITHMETIC
+        if len(self.currentCommand) == 1:
+            if self.currentCommand[0] in ARITHMETIC_COMMAND:
+                return C_ARITHMETIC
+            elif self.currentCommand[0] ==  POP:
+                return C_POP
+            else:
+                return C_PUSH
         elif self.currentCommand[0] ==  POP:
             return C_POP
-        elif self.currentCommand[0] == PUSH:
+        else:
             return C_PUSH
-
 
     def arg1(self):
         return self.currentCommand[0]

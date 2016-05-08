@@ -2,17 +2,18 @@ __author__ = 'davidberiro'
 import Parser
 
 
+
 class CodeWriter:
 
     def __init__(self, filename):
         # self.parser = Parser(inputFile)
-        self.outFile = open(filename, "wb")
+        self.outFile = open(filename, 'w')
 
     def setFileName(self,fileName):
         self.fileName = fileName
 
     def writeArithmetic (self,command):
-        self
+        pass
 
     def writePushPop (self,command,segment,index):
         if command == "push":

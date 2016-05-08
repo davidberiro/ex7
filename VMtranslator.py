@@ -1,7 +1,7 @@
 __author__ = 'davidberiro'
 
 import os
-import Parser
+from Parser import *
 from CodeWriter import *
 import sys
 
@@ -14,6 +14,7 @@ if directory.endswith(".vm"):
     os.chdir("..")
 else:
     outputname = directory.split("/")[-1]
+    print outputname
 
 
 for f in os.listdir("."):
@@ -23,17 +24,19 @@ for f in os.listdir("."):
 codewriter = CodeWriter(outputname)
 
 for file in files:
-    parser = Parser(file)
+    print (file)
+    print (files)
+    parser = Parser.Parser(file)
     codewriter.setFileName(file[:-3])
 
     while parser.hasMoreCommands():
         parser.advance()
         command = parser.commandType()
 
-        if command == parser.C_ARITHMETIC:
+        if command == Parser.C_ARITHMETIC:
             codewriter.writeArithmetic(parser.arg1())
-        elif command == parser.C_POP or command == parser.C_PUSH:
-            if command == parser.C_POP:
+        elif command == Parser.C_POP or command == Parser.C_PUSH:
+            if command == Parser.C_POP:
                 com = "pop"
             else:
                 com = "push"
@@ -41,7 +44,7 @@ for file in files:
             index = parser.arg2()
             codewriter.writePushPop(com, segment, index)
 
-codewriter.close()
+codewriter.Close()
 
 
 
