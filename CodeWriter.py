@@ -7,7 +7,7 @@ class CodeWriter:
 
     def __init__(self, filename):
         # self.parser = Parser(inputFile)
-        self.outFile = open(filename, 'w')
+        self.outFile = open(filename+'.asm', 'w')
 
     def setFileName(self,fileName):
         self.fileName = fileName
