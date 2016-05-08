@@ -57,7 +57,7 @@ class Parser:
         if self.len(self.currentCommand) == 1 and self.currentCommand[0] in ARITHMETIC_COMMAND:
             return C_ARITHMETIC
         elif self.currentCommand[0] ==  POP:
-            return C_PUSH
+            return C_POP
         elif self.currentCommand[0] == PUSH:
             return C_PUSH
 
