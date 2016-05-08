@@ -8,12 +8,66 @@ class CodeWriter:
     def __init__(self, filename):
         name = filename + ".asm"
         self.outFile = open(name, 'w')
+        self.fileName = ""
 
     def setFileName(self,fileName):
         self.fileName = fileName
 
-    def writeArithmetic (self,command):
+    def writeArithmetic(self,command):
+        if command == "add":
+            self.arithOper("+")
+        elif command == "sub":
+            self.arithOper("-")
+        elif command == "and":
+            self.arithOper("&")
+        elif command == "or":
+            self.arithOper("|")
+        elif command == "neg":
+            self.arithNegNot("-")
+        elif command == "not":
+            self.arithNegNot("!")
+        elif command == "eg":
+            self.arithJump("JEQ")
+        elif command == "gt":
+            self.arithJump("JGT")
+        elif command == "lt":
+            self.arithJump("JLT")
+
+    def arithJump(self,jump):
         pass
+
+    def arithNegNot(self,sign):
+        self.arithPrefix(False)
+        temp = sign + "M"
+        self.writeEqual("M",temp)
+        self.arithSufix(False)
+
+    def arithOper(self,sign):
+        self.arithPrefix(True)
+        self.writeEqual("M", "D")
+        self.arithPrefix(True)
+        temp = "D" + sign + "M"
+        self.writeEqual("D", temp)
+        self.arithSufix(True)
+
+
+    def arithPrefix(self,extand):
+        self.writeAddress("SP")
+        self.writeEqual("MD", "M-1")
+        self.writeEqual("A", "D")
+        if extand:
+            self.writeEqual("D", "M")
+            self.writeAddress("R13")
+
+    def arithSufix(self,extand):
+        if extand:
+            self.writeAddress("SP")
+            self.writeEqual("A", "M")
+            self.writeEqual("M", "D")
+        self.writeAddress("SP")
+        self.writeEqual("M", "M+1")
+
+
 
     def writePushPop (self,command,segment,index):
         if command == "push":
@@ -26,11 +80,7 @@ class CodeWriter:
                 self.writeSeg(segment,index)
                 self.writeEqual("A", "D+A")
                 self.writeEqual("D", "M")
-            self.writeAddress("SP")
-            self.writeEqual("A","M")
-            self.writeEqual("M", "D")
-            self.writeAddress("SP")
-            self.writeEqual("M", "M+1")
+            self.arithSufix(True)
 
         elif command == "pop":
             if segment == "static":
@@ -40,12 +90,7 @@ class CodeWriter:
                 self.writeEqual("D", "D+A")
             self.writeAddress("R13")
             self.writeEqual("M", "D")
-            self.writeAddress("SP")
-            self.writeEqual("M", "M-1")
-            self.writeAddress("SP")
-            self.writeEqual("A", "M")
-            self.writeEqual("D", "M")
-            self.writeAddress("R13")
+            self.arithPrefix(True)
             self.writeEqual("A", "M")
             self.writeEqual("M", "D")
 
@@ -65,6 +110,7 @@ class CodeWriter:
         self.writeAddress(self.fileName + "." + index)
         self.outFile.write("\n")
         self.writeEqual("D",AorM)
+
 
     def writeEqual(self,arg1,arg2):
         self.outFile.write(arg1 + "=" + arg2)
