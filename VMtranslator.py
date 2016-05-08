@@ -7,15 +7,16 @@ import sys
 
 files = []
 directory = sys.argv[1]
-os.chdir(directory)
-
 if directory.endswith(".vm"):
     outputname = directory.split("/")[-1][:-3]
-    os.chdir("..")
+    length = -(len(outputname) + 4)
+    directory = directory[:length]
+
+
 else:
     outputname = directory.split("/")[-1]
-    print outputname
 
+os.chdir(directory)
 
 for f in os.listdir("."):
     if f.endswith(".vm"):
@@ -25,7 +26,6 @@ codewriter = CodeWriter(outputname)
 
 for file in files:
     print (file)
-    print (files)
     parser = Parser.Parser(file)
     codewriter.setFileName(file[:-3])
 
