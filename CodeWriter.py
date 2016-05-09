@@ -48,16 +48,15 @@ class CodeWriter:
         self.outFile.write("D;" + jump + "\n")
         self.outFile.write("@SP\n")
         self.outFile.write("A=M\n")
-        self.outFile.write("M=-1\n")
-        self.arithSufix(False)
+        self.outFile.write("M=0\n")
         self.outFile.write("@SKIP" + str(self.labelnumber) + "\n")
         self.outFile.write("0;JMP\n")
         self.outFile.write("(TRUE" + str(self.labelnumber) + ")\n")
         self.outFile.write("@SP\n")
         self.outFile.write("A=M\n")
-        self.outFile.write("M=0\n")
-        self.arithSufix(False)
+        self.outFile.write("M=-1\n")
         self.outFile.write("(SKIP" + str(self.labelnumber) + ")\n")
+        self.arithSufix(False)
         self.labelnumber = self.labelnumber + 1
 
     def arithNegNot(self,sign):
