@@ -9,6 +9,7 @@ class CodeWriter:
         name = filename + ".asm"
         self.outFile = open(name, 'w')
         self.fileName = ""
+        self.labelnumber = 0
         self.outFile.write("@256\n")
         self.outFile.write("D=A\n")
         self.outFile.write("@SP\n")
@@ -39,8 +40,25 @@ class CodeWriter:
 
     def arithJump(self,jump):
         self.arithOper("-")
-        self.arithPrefix(True)
-        self.outFile.write
+        self.outFile.write("@SP\n")
+        self.outFile.write("M=M-1\n")
+        self.outFile.write("A=M\n")
+        self.outFile.write("D=M\n")
+        self.outFile.write("@TRUE" + str(self.labelnumber) + "\n")
+        self.outFile.write("D;" + jump + "\n")
+        self.outFile.write("@SP\n")
+        self.outFile.write("A=M\n")
+        self.outFile.write("M=-1\n")
+        self.arithSufix(False)
+        self.outFile.write("@SKIP" + str(self.labelnumber) + "\n")
+        self.outFile.write("0;JMP\n")
+        self.outFile.write("(TRUE" + str(self.labelnumber) + ")\n")
+        self.outFile.write("@SP\n")
+        self.outFile.write("A=M\n")
+        self.outFile.write("M=0\n")
+        self.arithSufix(False)
+        self.outFile.write("(SKIP" + str(self.labelnumber) + ")\n")
+        self.labelnumber = self.labelnumber + 1
 
     def arithNegNot(self,sign):
         self.arithPrefix(False)
