@@ -180,6 +180,8 @@
 
 import Parser
 
+Seg = dict(zip(('local', 'argument', 'this', 'that', 'temp', 'pointer'), ('LCL', 'ARG', 'THIS', 'THAT', 5, 3)))
+HACK_REGISTER = {"this":"THIS", "that":"THAT", "temp":"R5", "pointer":"THIS", "local":"LCL","argument":"ARG","constant":""}
 
 
 class CodeWriter:
@@ -271,61 +273,117 @@ class CodeWriter:
 
 
 
-    def writePushPop (self,command,segment,index):
+    # def writePushPop (self,command,segment,index):
+        # if command == "push":
+        #     if segment == "static":
+        #         self.writeStatic("M", index)
+        #     elif segment == "constant":
+        #         self.writeAddress(str(index)) # maybe the index need to be in string - need to chack all 'index'
+        #         self.writeEqual("D", "A")
+        #     elif segment == "temp":
+        #         temp = Seg.get(segment) + int(index)
+        #         self.writeAddress(temp)
+        #         self.writeEqual("D","M")
+        #     elif segment == "pointer":
+        #         temp = Seg.get(segment) + int(index)
+        #         self.writeAddress(temp)
+        #         self.writeEqual("D", "M")
+        #     else:
+        #         # self.writeSeg(segment,index)
+        #         self.writeAddress(Seg.get(segment))
+        #         self.writeEqual("D", "M")
+        #         self.writeAddress(index)
+        #         self.writeEqual("A", "D+A")
+        #         self.writeEqual("D", "M")
+        #     # self.arithSufix(True)
+        #     self.writeAddress("SP")
+        #     self.writeEqual("A", "M")
+        #     self.writeEqual("M", "D")
+        #     self.writeAddress("SP")
+        #     self.writeEqual("M", "M+1")
+        #
+        # elif command == "pop":
+        #     if segment == "static":
+        #         self.writeStatic("A", index)
+        #         self.writeAddress("R13")
+        #         self.writeEqual("M", "D")
+        #     elif segment == "temp":
+        #         temp = Seg.get(segment) + int(index)
+        #         self.writeAddress(temp)
+        #         self.writeEqual("D", "A")
+        #         self.writeAddress("R13")
+        #         self.writeEqual("M", "D")
+        #     elif segment == "pointer":
+        #         temp = Seg.get(segment) + int(index)
+        #         self.writeAddress(temp)
+        #         self.writeEqual("D", "A")
+        #         self.writeAddress("R13")
+        #         self.writeEqual("M", "D")
+        #     else:
+        #         # self.writeSeg(segment, index)
+        #         self.writeAddress(Seg.get(segment))
+        #         self.writeEqual("D", "M")
+        #         self.writeAddress(index)
+        #         self.writeEqual("D", "D+A")
+        #         self.writeAddress("R13")
+        #         self.writeEqual("M", "D")
+        #         # self.writeEqual("D", "M")
+        #     self.writeAddress("SP")
+        #     self.writeEqual("M", "M-1")
+        #     self.writeAddress("SP")
+        #     self.writeEqual("A", "M")
+        #     self.writeEqual("D", "M")
+        #     self.writeAddress("R13")
+        #     self.writeEqual("A", "M")
+        #     self.writeEqual("M", "D")
+        #     # self.writeEqual("M", "M+1")
+        #     # self.writeEqual("D", "D+A")
+        #     # self.arithPrefix(True)
+        #     # self.writeEqual("A", "M")
+        #     # self.writeEqual("M", "D")
+        #
+        # else:
+        #     return
+
+    def writePushPop(self, command, segment, index):
         if command == "push":
             if segment == "static":
-                self.writeStatic("M", index)
+                self.writeAddress(self.fileName + "." + index)
+                self.writeEqual("D", "M")
             elif segment == "constant":
-                self.writeAddress(str(index)) # maybe the index need to be in string - need to chack all 'index'
+                self.writeAddress(str(index))
                 self.writeEqual("D", "A")
-            elif segment == "temp":
-                temp = segment + int(index)
-                self.writeAddress(temp)
-                self.writeEqual("D","M")
-            elif segment == "pointer":
-                temp = segment + int(index)
-                self.writeAddress(temp)
-                self.writeEqual("D", "M")
             else:
-                # self.writeSeg(segment,index)
-                self.writeAddress(segment)
-                self.writeEqual("D", "M")
+                self.writeAddress(HACK_REGISTER[segment])
+                if segment == "temp" or segment == "pointer":
+                    self.writeEqual("D", "A")
+                else:
+                    self.writeEqual("D", "M")
                 self.writeAddress(index)
                 self.writeEqual("A", "D+A")
                 self.writeEqual("D", "M")
-            # self.arithSufix(True)
+
             self.writeAddress("SP")
             self.writeEqual("A", "M")
             self.writeEqual("M", "D")
             self.writeAddress("SP")
             self.writeEqual("M", "M+1")
 
+
         elif command == "pop":
             if segment == "static":
-                self.writeStatic("A", index)
-                self.writeAddress("R13")
-                self.writeEqual("M", "D")
-            elif segment == "temp":
-                temp = segment + int(index)
-                self.writeAddress(temp)
+                self.writeAddress(self.fileName + "." + index)
                 self.writeEqual("D", "A")
-                self.writeAddress("R13")
-                self.writeEqual("M", "D")
-            elif segment == "pointer":
-                temp = segment + int(index)
-                self.writeAddress(temp)
-                self.writeEqual("D", "A")
-                self.writeAddress("R13")
-                self.writeEqual("M", "D")
             else:
-                # self.writeSeg(segment, index)
-                self.writeAddress(segment)
-                self.writeEqual("D", "M")
+                self.writeAddress(HACK_REGISTER[segment])
+                if segment == "temp" or segment == "pointer":
+                    self.writeEqual("D", "A")
+                else:
+                    self.writeEqual("D", "M")
                 self.writeAddress(index)
                 self.writeEqual("D", "D+A")
-                self.writeAddress("R13")
-                self.writeEqual("M", "D")
-                # self.writeEqual("D", "M")
+            self.writeAddress("R13")
+            self.writeEqual("M", "D")
             self.writeAddress("SP")
             self.writeEqual("M", "M-1")
             self.writeAddress("SP")
@@ -334,23 +392,21 @@ class CodeWriter:
             self.writeAddress("R13")
             self.writeEqual("A", "M")
             self.writeEqual("M", "D")
-            # self.writeEqual("M", "M+1")
-            # self.writeEqual("D", "D+A")
-            # self.arithPrefix(True)
-            # self.writeEqual("A", "M")
-            # self.writeEqual("M", "D")
-
         else:
             return
 
-    # def writeSeg(self,segment,index):
-    #     seg = self.buildSeg(segment)
-    #     self.writeAddress(seg)
-    #     if segment == "temp" or "pointer":
-    #         self.writeEqual("D", "A")
-    #     else:
-    #         self.writeEqual("D", "M")
-    #     self.writeAddress(index)
+
+
+
+
+    def writeSeg(self,segment,index):
+        seg = self.buildSeg(segment)
+        self.writeAddress(seg)
+        if segment == "temp" or "pointer":
+            self.writeEqual("D", "A")
+        else:
+            self.writeEqual("D", "M")
+        self.writeAddress(index)
 
     def writeStatic(self,AorM,index):
         self.writeAddress(self.fileName + index)
