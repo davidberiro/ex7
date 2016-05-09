@@ -25,7 +25,6 @@ for f in os.listdir("."):
 codewriter = CodeWriter(outputname)
 
 for file in files:
-    print (file)
     parser = Parser.Parser(file)
     codewriter.setFileName(file[:-3])
 
@@ -42,7 +41,6 @@ for file in files:
                 com = "push"
             segment = parser.arg1()
             index = parser.arg2()
-            print ("command: " + com + ", segment: " + segment + ", index: " + str(index))
             codewriter.writePushPop(com, segment, index)
 
 codewriter.Close()
