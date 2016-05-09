@@ -54,21 +54,26 @@ class Parser:
     def commandType(self):
         if len(self.currentCommand) == 1:
             if self.currentCommand[0] in ARITHMETIC_COMMAND:
+                print(self.currentLine)
+                print ("Command is C_ARITHMETIC")
                 return C_ARITHMETIC
-            elif self.currentCommand[0] ==  POP:
-                return C_POP
-            else:
-                return C_PUSH
         elif self.currentCommand[0] ==  POP:
+            print(self.currentLine)
+            print ("Command is C_POP")
             return C_POP
         else:
+            print(self.currentLine)
+            print ("Command is C_PUSH")
             return C_PUSH
 
     def arg1(self):
-        return self.currentCommand[0]
+        if self.currentCommand[0] in ARITHMETIC_COMMAND:
+            return self.currentCommand[0]
+        else:
+            return self.currentCommand[1]
 
     def arg2(self):
-        return self.currentCommand[1]
+        return self.currentCommand[2]
 
 
 

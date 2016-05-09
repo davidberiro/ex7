@@ -9,6 +9,10 @@ class CodeWriter:
         name = filename + ".asm"
         self.outFile = open(name, 'w')
         self.fileName = ""
+        self.outFile.write("@256\n")
+        self.outFile.write("D=A\n")
+        self.outFile.write("@SP\n")
+        self.outFile.write("M=D\n")
 
     def setFileName(self,fileName):
         self.fileName = fileName
@@ -26,7 +30,7 @@ class CodeWriter:
             self.arithNegNot("-")
         elif command == "not":
             self.arithNegNot("!")
-        elif command == "eg":
+        elif command == "eq":
             self.arithJump("JEQ")
         elif command == "gt":
             self.arithJump("JGT")
@@ -34,7 +38,9 @@ class CodeWriter:
             self.arithJump("JLT")
 
     def arithJump(self,jump):
-        pass
+        self.arithOper("-")
+        self.arithPrefix(True)
+        self.outFile.write
 
     def arithNegNot(self,sign):
         self.arithPrefix(False)
@@ -74,7 +80,7 @@ class CodeWriter:
             if segment == "static":
                 self.writeStatic("M", index)
             elif segment == "constant":
-                self.writeAddress(index) # maybe the index need to be in string - need to chack all 'index'
+                self.writeAddress(str(index)) # maybe the index need to be in string - need to chack all 'index'
                 self.writeEqual("D", "A")
             else:
                 self.writeSeg(segment,index)

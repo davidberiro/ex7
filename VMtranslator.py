@@ -42,6 +42,7 @@ for file in files:
                 com = "push"
             segment = parser.arg1()
             index = parser.arg2()
+            print ("command: " + com + ", segment: " + segment + ", index: " + str(index))
             codewriter.writePushPop(com, segment, index)
 
 codewriter.Close()
